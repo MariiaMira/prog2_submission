@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class Edge <T>{
     private final T destination;
     private final String name;
@@ -28,6 +30,18 @@ public class Edge <T>{
         return name;
     }
 
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Edge<T> edge = (Edge<T>) o;
+        return weight == edge.weight &&
+                Objects.equals(destination, edge.destination) &&
+                Objects.equals(name, edge.name);
+    }
+    @Override
+    public int hashCode() {
+        return Objects.hash(destination, name, weight);
+    }
     public String toString(){
         return "";
     }
