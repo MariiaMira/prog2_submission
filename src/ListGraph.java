@@ -136,6 +136,7 @@ public class ListGraph <T> implements Graph<T>{
         //}
         return false;
     }
+    //hej
 
     @Override
     public List<Edge<T>> getPath(T from, T to) {
