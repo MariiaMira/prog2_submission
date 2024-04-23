@@ -34,6 +34,12 @@ public class ListGraph <T> implements Graph<T>{
 
     @Override
     public void setConnectionWeight(T node1, T node2, int weight) {
+        if (!locations.containsKey(node1) || !locations.containsKey(node2)){
+            throw new NoSuchElementException("The node is not found");
+        }
+        if (weight < 0){
+            throw new IllegalArgumentException("The weight is negative");
+        }
 
     }
 
