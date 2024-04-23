@@ -1,11 +1,11 @@
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class ListGraph <T> implements Graph<T>{
+    private final Map<T, Set<Edge<T>>> locations = new HashMap<>();
+
     @Override
     public void add(T node) {
-
+        locations.putIfAbsent(node, new HashSet<>());
     }
 
     @Override
