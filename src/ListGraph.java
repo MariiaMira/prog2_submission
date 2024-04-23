@@ -94,8 +94,9 @@ public class ListGraph <T> implements Graph<T>{
             throw new IllegalStateException();
         }
 
-        locations.get(node1).remove(edgeFromTo);
-        locations.get(node2).remove(edgeToFrom);
+        locations.get(node1).remove(edgeToFrom);
+        locations.get(node2).remove(edgeFromTo);
+
     }
 
     @Override
