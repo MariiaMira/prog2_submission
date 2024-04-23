@@ -83,7 +83,19 @@ public class ListGraph <T> implements Graph<T>{
 
     @Override
     public void disconnect(T node1, T node2) {
+        if (!locations.containsKey(node1) || !locations.containsKey(node2)){
+            throw new NoSuchElementException("The node is not found");
+        }
 
+        Edge<T> edgeFromTo = getEdgeBetween(node2, node1);
+        Edge<T> edgeToFrom = getEdgeBetween(node1, node2);
+
+        if (edgeToFrom == null || edgeFromTo == null) {
+            throw new IllegalStateException();
+        }
+
+        locations.get(node1).remove(edgeFromTo);
+        locations.get(node2).remove(edgeToFrom);
     }
 
     @Override

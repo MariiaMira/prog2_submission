@@ -30,6 +30,7 @@ public class Edge <T>{
         return name;
     }
 
+    /*@Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -37,6 +38,14 @@ public class Edge <T>{
         return weight == edge.weight &&
                 Objects.equals(destination, edge.destination) &&
                 Objects.equals(name, edge.name);
+    }*/
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj instanceof Edge edge) {
+            return destination.equals(edge.destination) && name.equals(edge.name) && weight == edge.getWeight();
+        }
+        return false;
     }
     @Override
     public int hashCode() {
