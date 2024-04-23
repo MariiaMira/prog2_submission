@@ -64,6 +64,16 @@ public class ListGraph <T> implements Graph<T>{
 
     @Override
     public Edge getEdgeBetween(T node1, T node2) {
+        if (!locations.containsKey(node1) || !locations.containsKey(node2)){
+            throw new NoSuchElementException("The node is not found");
+        }
+
+        Set<Edge<T>> edges = locations.get(node1);
+        for(Edge e: edges){
+            if(e.getDestination().equals(node2)){
+                return e;
+            }
+        }
         return null;
     }
 
