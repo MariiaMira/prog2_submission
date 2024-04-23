@@ -58,8 +58,12 @@ public class ListGraph <T> implements Graph<T>{
     }
 
     @Override
-    public Collection<Edge> getEdgesFrom(T node) {
-        return null;
+    public Collection<Edge<T>> getEdgesFrom(T node) {
+        if (!locations.containsKey(node)){
+            throw new NoSuchElementException("The node is not found");
+        }
+        Set<Edge<T>> edgeList = locations.get(node);
+        return Set.copyOf(edgeList);
     }
 
     @Override
@@ -93,7 +97,9 @@ public class ListGraph <T> implements Graph<T>{
     }
 
     @Override
-    public List<Edge> getPath(T from, T to) {
+    public List<Edge<T>> getPath(T from, T to) {
+        Map<T, T> connection = new HashMap<>();
+
         return null;
     }
 }

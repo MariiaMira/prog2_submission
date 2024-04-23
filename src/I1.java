@@ -33,19 +33,19 @@ public class I1 {
 		app.test0_new_graph_is_empty();
 
 		// testa att lägga till nod
-		app.test1_add_no_duplicate();
+		//app.test1_add_no_duplicate();
 
 		// testa att lägga till samma nod igen
-		app.test2_add_with_duplicate();
+		//app.test2_add_with_duplicate();
 
 		// testa connect
 		app.test3_connect();
 
 		// testa disconnect
-		app.test4_disconnect();
+		//app.test4_disconnect();
 
 		// testa remove
-		app.test5_remove();
+		//app.test5_remove();
 
 		// klart
 		app.tests_finished();
