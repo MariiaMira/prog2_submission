@@ -10,6 +10,25 @@ public class ListGraph <T> implements Graph<T>{
 
     @Override
     public void connect(T node1, T node2, String name, int weight) {
+        if (!locations.containsKey(node1) || !locations.containsKey(node2)){
+            throw new NoSuchElementException("The node is not found");
+        }
+        if (weight < 0){
+            throw new IllegalArgumentException("The weight is negative");
+        }
+
+        Edge<T> edge1 = new Edge(node2, name, weight);
+        Edge<T> edge2 = new Edge(node1, name, weight);
+
+        Set<Edge<T>> fromDestinations = locations.get(node1);
+        Set<Edge<T>> toDestinations = locations.get(node2);
+
+        if (fromDestinations.contains(edge1) || toDestinations.contains(edge2)){
+            throw new IllegalStateException("The edge already exists");
+        }
+
+        fromDestinations.add(edge1);
+        toDestinations.add(edge2);
 
     }
 
