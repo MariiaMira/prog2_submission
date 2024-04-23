@@ -53,8 +53,8 @@ public class ListGraph <T> implements Graph<T>{
     }
 
     @Override
-    public Set<T> getNodes() {
-        return null;
+    public Set<T> getNodes() { // TODO ingående?
+        return Collections.unmodifiableSet(locations.keySet());
     }
 
     @Override
