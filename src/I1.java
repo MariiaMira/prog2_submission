@@ -1,5 +1,5 @@
 
-import java.util.NoSuchElementException;
+//import java.util.NoSuchElementException;
 
 /**
  * Ett väldigt enkelt testprogram som testar några av
@@ -11,6 +11,7 @@ import java.util.NoSuchElementException;
  * <p>
  * Filen ska inte lämnas in.
  */
+/*
 public class I1 {
 
 	private static final double VERSION = 2.1;
@@ -190,3 +191,4 @@ public class I1 {
 		System.out.printf("%n ==> No exceptions thrown so all tests passed. <== %n");
 	}
 }
+*/

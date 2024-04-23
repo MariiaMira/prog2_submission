@@ -94,8 +94,8 @@ public class ListGraph <T> implements Graph<T>{
             throw new IllegalStateException();
         }
 
-        locations.get(node1).remove(edgeFromTo);
-        locations.get(node2).remove(edgeToFrom);
+        locations.get(node1).remove(edgeToFrom);
+        locations.get(node2).remove(edgeFromTo);
     }
 
     @Override
@@ -111,6 +111,29 @@ public class ListGraph <T> implements Graph<T>{
 
     @Override
     public boolean pathExists(T from, T to) {
+        Set<T> visited = new HashSet<>();
+
+        return recursiveVisitAll(from, to, visited);
+    }
+
+    private boolean recursiveVisitAll(T node1, T node2, Set<T> visited){
+        if (!locations.containsKey(node1) || !locations.containsKey(node2)){
+            return false;
+        }
+
+        visited.add(node1);
+        if(node1.equals(node2)){
+            return true;
+        }
+        //if(!locations.get(node1).isEmpty() && !locations.get(node2).isEmpty()) {
+            for (Edge<T> e : locations.get(node1)) {
+                if (!visited.contains(e.getDestination())) {
+                    if (recursiveVisitAll(e.getDestination(), node2, visited)) {
+                        return true;
+                    }
+                }
+            }
+        //}
         return false;
     }
 
