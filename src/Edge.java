@@ -8,4 +8,27 @@ public class Edge <T>{
         this.name = name;
         this.weight = weight;
     }
+
+    public T getDestination(){
+        return destination;
+    }
+
+    public int getWeight(){
+        return weight;
+    }
+
+    public void setWeight(int weight){
+        if (weight < 0){
+            throw new IllegalArgumentException("The weight is negative");
+        }
+        this.weight = weight;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String toString(){
+        return "";
+    }
 }
