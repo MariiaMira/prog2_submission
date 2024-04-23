@@ -88,7 +88,13 @@ public class ListGraph <T> implements Graph<T>{
 
     @Override
     public void remove(T node) {
-
+        if (!locations.containsKey(node)){
+            throw new NoSuchElementException("The node is not found");
+        }
+        locations.remove(node);
+        for (Set<Edge<T>> edges : locations.values()) {
+            edges.removeIf(edge -> edge.getDestination().equals(node));
+        }
     }
 
     @Override
