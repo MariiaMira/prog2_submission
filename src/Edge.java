@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Edge <T>{
+public class Edge <T> implements Serializable {
     private final T destination;
     private final String name;
     private int weight;
@@ -30,16 +31,6 @@ public class Edge <T>{
         return name;
     }
 
-    /*@Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Edge<T> edge = (Edge<T>) o;
-        return weight == edge.weight &&
-                Objects.equals(destination, edge.destination) &&
-                Objects.equals(name, edge.name);
-    }*/
-
     @Override
     public boolean equals(Object obj) {
         if (obj instanceof Edge edge) {
@@ -51,7 +42,9 @@ public class Edge <T>{
     public int hashCode() {
         return Objects.hash(destination, name, weight);
     }
-    public String toString(){
-        return "";
+    @Override
+    public String toString() {
+        return "till " + destination + " med " + name + " tar " + weight;
     }
+
 }

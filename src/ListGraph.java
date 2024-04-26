@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.util.*;
 
-public class ListGraph <T> implements Graph<T>{
+public class ListGraph <T> implements Graph<T>, Serializable {
     private final Map<T, Set<Edge<T>>> locations = new HashMap<>();
 
     @Override
