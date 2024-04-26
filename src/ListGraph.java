@@ -182,6 +182,10 @@ public class ListGraph <T> implements Graph<T>, Serializable {
                 }
             }
         }
+        return returnPath(to, prev);
+    }
+
+    private List<Edge<T>> returnPath(T to, Map<T, T> prev) {
         LinkedList<Edge<T>> path = new LinkedList<>();
         T temp = to;
         if(prev.get(temp) != null || temp.equals(to)){
@@ -195,7 +199,6 @@ public class ListGraph <T> implements Graph<T>, Serializable {
             }
         }
         return path;
-        //hej
     }
 
     public String toString(){
