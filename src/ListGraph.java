@@ -140,8 +140,59 @@ public class ListGraph <T> implements Graph<T>{
 
     @Override
     public List<Edge<T>> getPath(T from, T to) {
-        Map<T, T> connection = new HashMap<>();
+        if (!pathExists(from, to)){
+            return null;
+        }
+        Map<T, Integer> dist = new HashMap<>();
+        Map<T, T> prev = new HashMap<>();
+        Set<T> q = new HashSet<>();
 
-        return null;
+        for(T node : locations.keySet()){
+            dist.put(node, Integer.MAX_VALUE);
+            prev.put(node, null);
+            q.add(node);
+        }
+
+        dist.put(from, 0);
+
+        while(!q.isEmpty()){
+            T temp = null;
+            int minDist = Integer.MAX_VALUE;
+            for( T node : q){
+                int i = dist.get(node);
+                if(i < minDist){
+                    temp = node;
+                    minDist = i;
+                }
+            }
+            if(temp.equals(to)){
+                break;
+            }
+
+            q.remove(temp);
+
+            for(Edge<T> tempEdge : locations.get(temp)){
+                if(q.contains(tempEdge.getDestination())){
+                    int altDistance = dist.get(temp) + tempEdge.getWeight();
+                    if(altDistance < dist.get(tempEdge.getDestination())){
+                        dist.put(tempEdge.getDestination(), altDistance); // Ändrar distans till den lägre distansen
+                        prev.put(tempEdge.getDestination(), temp); // Sätter temp till närmaste granne.
+                    }
+                }
+            }
+        }
+        LinkedList<Edge<T>> path = new LinkedList<>();
+        T temp = to;
+        if(prev.get(temp) != null || temp.equals(to)){
+            while( temp != null){
+                T next = prev.get(temp);
+                if(next != null){
+                    Edge<T> edge = getEdgeBetween(next, temp);
+                    path.addFirst(edge);
+                }
+                temp = next;
+            }
+        }
+        return path;
     }
 }
