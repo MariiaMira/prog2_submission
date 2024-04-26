@@ -197,4 +197,15 @@ public class ListGraph <T> implements Graph<T>, Serializable {
         return path;
         //hej
     }
+
+    public String toString(){
+        StringBuilder builder = new StringBuilder();
+        for(Map.Entry<T, Set<Edge<T>>> l: locations.entrySet()){
+            builder.append(l.getKey());
+            for(Edge<T> edge : l.getValue()){
+                builder.append(edge.toString());
+            }
+        }
+        return builder.toString();
+    }
 }
