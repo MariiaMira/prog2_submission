@@ -42,7 +42,9 @@ public class Edge <T> implements Serializable {
     public int hashCode() {
         return Objects.hash(destination, name, weight);
     }
-    public String toString(){
-        return "";
+    @Override
+    public String toString() {
+        return "till " + destination + " med " + name + " tar " + weight;
     }
+
 }
