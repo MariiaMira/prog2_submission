@@ -2,10 +2,7 @@ import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
@@ -16,6 +13,7 @@ import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 import java.io.*;
+import java.util.Optional;
 
 public class PathFinder extends Application {
     private BorderPane root;
@@ -24,6 +22,7 @@ public class PathFinder extends Application {
     private ImageView imageView;
     private ListGraph<Location> graph;
     private FlowPane pane;
+    private boolean saved = false;
 
     @Override
     public void start(Stage stage) {
@@ -45,7 +44,10 @@ public class PathFinder extends Application {
 
         MenuItem open = new MenuItem();
         open.setText("Open");
-        open.setOnAction(actionEvent -> open());
+        open.setOnAction(actionEvent -> {
+            open();
+            stage.sizeToScene();
+        });
         MenuItem save = new MenuItem();
         save.setText("Save");
         MenuItem saveImage = new MenuItem();
@@ -88,6 +90,16 @@ public class PathFinder extends Application {
 
     private void open() {
         //Check om tidigare har sparats.
+        if(saved == false){
+            Alert warning = new Alert(Alert.AlertType.CONFIRMATION);
+            warning.setTitle("WARNING!");
+            warning.setHeaderText("Unsaved changes, continue anyway?");
+            Optional<ButtonType> answer = warning.showAndWait();
+            if(answer.isPresent() && (answer.get() == ButtonType.CANCEL)){
+                System.out.println("Tryck på cancel");
+                return;
+            }
+        }
 
         graph = new ListGraph<>();
         BufferedReader reader;
