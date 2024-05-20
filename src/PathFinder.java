@@ -20,12 +20,14 @@ public class PathFinder extends Application {
     private ImageView imageView;
     private Graph<Location> graph = new ListGraph<>();
     private Pane pane;
-    private boolean saved = true;
+    private boolean saved = false;
 
     @Override
     public void start(Stage stage) {
         root = new BorderPane();
         root.setPrefWidth(650);
+        pane = new Pane();
+        pane.setId("outputArea");
         MenuBar menuBar = new MenuBar();
         menuBar.setId("menu");
         Menu fileMenu = new Menu("File");
@@ -83,6 +85,8 @@ public class PathFinder extends Application {
         root.setTop(top);
         imageView = new ImageView();
 
+
+
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
@@ -105,7 +109,7 @@ public class PathFinder extends Application {
             warning.setTitle("WARNING!");
             warning.setHeaderText("Unsaved changes, continue anyway?");
             Optional<ButtonType> answer = warning.showAndWait();
-            if(answer.isPresent() && (answer.get() == ButtonType.CANCEL)){
+            if(answer.isPresent() && answer.get() == ButtonType.CANCEL){
                 return;
             }
             if(answer == null){
