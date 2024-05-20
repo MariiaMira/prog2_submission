@@ -1,5 +1,4 @@
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -8,8 +7,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Shape;
 import javafx.stage.Stage;
 
 import java.io.*;
@@ -97,6 +94,9 @@ public class PathFinder extends Application {
             Optional<ButtonType> answer = warning.showAndWait();
             if(answer.isPresent() && (answer.get() == ButtonType.CANCEL)){
                 System.out.println("Tryck på cancel");
+                return;
+            }
+            if(answer == null){
                 return;
             }
         }
