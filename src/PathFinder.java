@@ -105,7 +105,7 @@ public class PathFinder extends Application {
             warning.setTitle("WARNING!");
             warning.setHeaderText("Unsaved changes, continue anyway?");
             Optional<ButtonType> answer = warning.showAndWait();
-            if(answer.isPresent() && (answer.get() == ButtonType.CANCEL)){
+            if(answer.isPresent() && answer.get() == ButtonType.CANCEL){
                 return;
             }
             if(answer == null){
