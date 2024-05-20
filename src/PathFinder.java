@@ -24,10 +24,17 @@ public class PathFinder extends Application {
 
     @Override
     public void start(Stage stage) {
+        stage.setTitle("PathFinder");
         root = new BorderPane();
         root.setPrefWidth(650);
         pane = new Pane();
         pane.setId("outputArea");
+        imageView = new ImageView();
+        //pane.getChildren().add(imageView);
+        root.setCenter(pane);
+
+
+
         MenuBar menuBar = new MenuBar();
         menuBar.setId("menu");
         Menu fileMenu = new Menu("File");
@@ -40,6 +47,7 @@ public class PathFinder extends Application {
         newMap.setText("New Map");
         newMap.setId("menuNewMap");
         newMap.setOnAction(actionEvent -> {
+            pane.getChildren().clear();
             loadMap("file:europa.gif");
             graph = new ListGraph<>();
             stage.sizeToScene();
@@ -97,8 +105,9 @@ public class PathFinder extends Application {
     private void loadMap(String fileName) {
         Image mapImage = new Image(fileName);
         imageView.setImage(mapImage);
-        pane = new Pane(imageView);
-        root.setCenter(pane);
+        pane.getChildren().add(imageView);
+        //pane = new Pane(imageView);
+        //root.setCenter(pane);
 
     }
 
