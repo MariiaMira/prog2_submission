@@ -20,11 +20,10 @@ public class PathFinder extends Application {
     private ImageView imageView;
     private Graph<Location> graph = new ListGraph<>();
     private Pane pane;
-    private boolean saved = false;
+    private boolean saved = true;
 
     @Override
     public void start(Stage stage) {
-        pane.setId("outputArea");
         root = new BorderPane();
         root.setPrefWidth(650);
         MenuBar menuBar = new MenuBar();
@@ -56,7 +55,7 @@ public class PathFinder extends Application {
         save.setId("menuSaveFile");
         MenuItem saveImage = new MenuItem();
         saveImage.setText("Save Image");
-        saveImage.setId("manuSaveImage");
+        saveImage.setId("menuSaveImage");
         MenuItem exit = new MenuItem();
         exit.setText("Exit");
         exit.setId("menuExit");
