@@ -22,7 +22,7 @@ public class PathFinder extends Application {
     private VBox top;
 
     private ImageView imageView;
-    private ListGraph<String> graph;
+    private ListGraph<Location> graph;
     private FlowPane pane;
 
     @Override
@@ -45,6 +45,7 @@ public class PathFinder extends Application {
 
         MenuItem open = new MenuItem();
         open.setText("Open");
+        open.setOnAction(actionEvent -> open());
         MenuItem save = new MenuItem();
         save.setText("Save");
         MenuItem saveImage = new MenuItem();
@@ -86,25 +87,52 @@ public class PathFinder extends Application {
     }
 
     private void open() {
+        //Check om tidigare har sparats.
+
+        graph = new ListGraph<>();
         BufferedReader reader;
         try {
             reader = new BufferedReader(new FileReader("europa.graph"));
             String fileName = reader.readLine();
             loadMap(fileName);
 
-            String line;
-            for((line = reader.readLine()) != null){
+            String line = reader.readLine();
                 String[] parts = line.split(";");
                 for(int i = 0; i<parts.length;i += 3){
                     String name = parts[i];
                     double x = Double.parseDouble(parts[i+1]);
                     double y = Double.parseDouble(parts[i+2]);
-                    graph.add(name);
-
-
-
+                    Location location = new Location(name, x, y);
+                    graph.add(location);
                 }
+
+
+            while((line = reader.readLine()) != null){
+                String[] edgeData = line.split(";");
+
+                Location from = null;
+                Location to = null;
+                for(Location l : graph.getNodes()){
+                    if(edgeData[0].equals(l.getName())){
+                        from = l;
+                    }
+                    if(edgeData[1].equals(l.getName())){
+                        to = l;
+                    }
+                }
+
+                String medium = edgeData[2];
+                int distance = Integer.parseInt(edgeData[3]);
+
+                if(from != null && to != null)
+                    if(!graph.pathExists(from, to)) {
+                        graph.connect(from, to, medium, distance);
+                    }
+
+                System.out.println(graph.getNodes());
+
             }
+
 
 
 
