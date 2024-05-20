@@ -117,8 +117,9 @@ public class PathFinder extends Application {
                     Location location = new Location(name, x, y);
                     graph.add(location);
                     pane.getChildren().add(location);
-                    location.setLayoutX(x); // Set the X coordinate
-                    location.setLayoutY(y);
+                    location.relocate(x -10,y-10);
+                    //location.setLayoutX(x);
+                    //location.setLayoutY(y);
                 }
             while((line = reader.readLine()) != null){
                 String[] edgeData = line.split(";");
