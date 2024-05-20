@@ -20,8 +20,8 @@ public class Location extends VBox {
         this.circle = new Circle(8,Color.BLUE);
         this.label = new Label(name);
         getChildren().addAll(circle, label);
-        setLayoutX(x);
-        setLayoutY(y);
+        //setLayoutX(x);
+        //setLayoutY(y);
 
 
         //container.getChildren().addAll(circle, label);

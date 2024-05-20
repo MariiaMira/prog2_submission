@@ -6,6 +6,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -18,7 +19,7 @@ public class PathFinder extends Application {
 
     private ImageView imageView;
     private ListGraph<Location> graph;
-    private FlowPane pane;
+    private Pane pane;
     private boolean saved = false;
 
     @Override
@@ -80,7 +81,7 @@ public class PathFinder extends Application {
     private void loadMap(String fileName) {
         Image mapImage = new Image(fileName);
         imageView.setImage(mapImage);
-        pane = new FlowPane(imageView);
+        pane = new Pane(imageView);
         root.setCenter(pane);
 
     }
@@ -115,9 +116,9 @@ public class PathFinder extends Application {
                     double y = Double.parseDouble(parts[i+2]);
                     Location location = new Location(name, x, y);
                     graph.add(location);
-
                     pane.getChildren().add(location);
-                    location.relocate(x,y);
+                    location.setLayoutX(x); // Set the X coordinate
+                    location.setLayoutY(y);
                 }
             while((line = reader.readLine()) != null){
                 String[] edgeData = line.split(";");
