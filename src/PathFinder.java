@@ -16,6 +16,8 @@ public class PathFinder extends Application {
     private BorderPane root;
     private VBox top;
 
+    private ImageView imageView;
+    private ListGraph<String> graph;
 
     @Override
     public void start(Stage stage) {
@@ -40,6 +42,7 @@ public class PathFinder extends Application {
         exit.setText("Exit");
         fileMenu.getItems().addAll(newMap, open, save, saveImage, exit);
 
+
         FlowPane buttonList = new FlowPane();
         buttonList.setAlignment(Pos.CENTER);
         buttonList.setStyle("-fx-font-size:14");
@@ -54,6 +57,7 @@ public class PathFinder extends Application {
 
         top.getChildren().addAll(menuBar, buttonList);
         root.setTop(top);
+        imageView = new ImageView();
 
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -61,4 +65,13 @@ public class PathFinder extends Application {
 
 
     }
+
+    private void loadMap() {
+        Image mapImage = new Image("file:europa.gif");
+        imageView.setImage(mapImage);
+        root.setCenter(imageView);
+        graph = new ListGraph<>();
+    }
+
+
 }
