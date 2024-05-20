@@ -24,16 +24,20 @@ public class PathFinder extends Application {
 
     @Override
     public void start(Stage stage) {
+        pane.setId("outputArea");
         root = new BorderPane();
         root.setPrefWidth(650);
         MenuBar menuBar = new MenuBar();
+        menuBar.setId("menu");
         Menu fileMenu = new Menu("File");
+        fileMenu.setId("menuFile");
         menuBar.getMenus().add(fileMenu);
         top = new VBox();
 
         VBox menu = new VBox();
         MenuItem newMap = new MenuItem();
         newMap.setText("New Map");
+        newMap.setId("menuNewMap");
         newMap.setOnAction(actionEvent -> {
             loadMap("file:europa.gif");
             graph = new ListGraph<>();
@@ -42,16 +46,20 @@ public class PathFinder extends Application {
 
         MenuItem open = new MenuItem();
         open.setText("Open");
+        open.setId("menuOpenFile");
         open.setOnAction(actionEvent -> {
             open();
             stage.sizeToScene();
         });
         MenuItem save = new MenuItem();
         save.setText("Save");
+        save.setId("menuSaveFile");
         MenuItem saveImage = new MenuItem();
         saveImage.setText("Save Image");
+        saveImage.setId("manuSaveImage");
         MenuItem exit = new MenuItem();
         exit.setText("Exit");
+        exit.setId("menuExit");
         fileMenu.getItems().addAll(newMap, open, save, saveImage, exit);
 
 
@@ -61,10 +69,15 @@ public class PathFinder extends Application {
         buttonList.setHgap(10);
 
         Button findPath = new Button("Find Path");
+        findPath.setId("btnFindPath");
         Button showCon = new Button("Show Connection");
+        showCon.setId("btnShowConnection");
         Button newPlace = new Button("New Place");
+        newPlace.setId("btnNewPlace");
         Button newCon = new Button("New Connection");
+        newCon.setId("btnNewConnection");
         Button changeCon = new Button("Change Connection");
+        changeCon.setId("btnChangeConnection");
         buttonList.getChildren().addAll(findPath, showCon, newPlace, newCon, changeCon);
 
         top.getChildren().addAll(menuBar, buttonList);
@@ -115,6 +128,7 @@ public class PathFinder extends Application {
                 double x = Double.parseDouble(parts[i+1]);
                 double y = Double.parseDouble(parts[i+2]);
                 Location location = new Location(name, x, y);
+                location.setId(name);
                 graph.add(location);
                 pane.getChildren().add(location);
                 location.relocate(x -10,y-10);
