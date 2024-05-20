@@ -45,12 +45,13 @@ public class Location extends VBox {
     }
 
     // förändra färg vid klick
-    class clickHandler implements EventHandler<MouseEvent>{
+    /*class clickHandler implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent mouseEvent) {
             circle.setFill(Color.RED);
             requestFocus();
         }
     }
+    */
 
 }

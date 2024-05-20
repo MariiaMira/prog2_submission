@@ -18,7 +18,7 @@ public class PathFinder extends Application {
     private VBox top;
 
     private ImageView imageView;
-    private ListGraph<Location> graph;
+    private Graph<Location> graph = new ListGraph<>();
     private Pane pane;
     private boolean saved = false;
 
@@ -88,7 +88,7 @@ public class PathFinder extends Application {
 
     private void open() {
         //Check om tidigare har sparats.
-        if(saved == false){
+        if(!saved){
             Alert warning = new Alert(Alert.AlertType.CONFIRMATION);
             warning.setTitle("WARNING!");
             warning.setHeaderText("Unsaved changes, continue anyway?");
@@ -109,18 +109,18 @@ public class PathFinder extends Application {
             loadMap(fileName);
 
             String line = reader.readLine();
-                String[] parts = line.split(";");
-                for(int i = 0; i<parts.length;i += 3){
-                    String name = parts[i];
-                    double x = Double.parseDouble(parts[i+1]);
-                    double y = Double.parseDouble(parts[i+2]);
-                    Location location = new Location(name, x, y);
-                    graph.add(location);
-                    pane.getChildren().add(location);
-                    location.relocate(x -10,y-10);
-                    //location.setLayoutX(x);
-                    //location.setLayoutY(y);
-                }
+            String[] parts = line.split(";");
+            for(int i = 0; i<parts.length;i += 3){
+                String name = parts[i];
+                double x = Double.parseDouble(parts[i+1]);
+                double y = Double.parseDouble(parts[i+2]);
+                Location location = new Location(name, x, y);
+                graph.add(location);
+                pane.getChildren().add(location);
+                location.relocate(x -10,y-10);
+                //location.setLayoutX(x);
+                //location.setLayoutY(y);
+            }
             while((line = reader.readLine()) != null){
                 String[] edgeData = line.split(";");
 
@@ -139,9 +139,9 @@ public class PathFinder extends Application {
                 int distance = Integer.parseInt(edgeData[3]);
 
                 if(from != null && to != null && !graph.pathExists(from, to)) {
-                        graph.connect(from, to, medium, distance); }
+                    graph.connect(from, to, medium, distance); }
             }
-            System.out.println(graph.getNodes());
+            //System.out.println(graph.getNodes());
         }
         catch(FileNotFoundException e){
             e.printStackTrace();
