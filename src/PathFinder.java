@@ -93,7 +93,6 @@ public class PathFinder extends Application {
             warning.setHeaderText("Unsaved changes, continue anyway?");
             Optional<ButtonType> answer = warning.showAndWait();
             if(answer.isPresent() && (answer.get() == ButtonType.CANCEL)){
-                System.out.println("Tryck på cancel");
                 return;
             }
             if(answer == null){
@@ -116,9 +115,10 @@ public class PathFinder extends Application {
                     double y = Double.parseDouble(parts[i+2]);
                     Location location = new Location(name, x, y);
                     graph.add(location);
+
+                    pane.getChildren().add(location);
+                    location.relocate(x,y);
                 }
-
-
             while((line = reader.readLine()) != null){
                 String[] edgeData = line.split(";");
 

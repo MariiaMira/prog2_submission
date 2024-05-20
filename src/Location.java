@@ -5,22 +5,27 @@ import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
-public class Location extends Circle {
+public class Location extends VBox {
     private String name;
     private double x;
     private double y;
     private Circle circle;
+    private Label label;
 
     public Location(String name, double x, double y){
         this.name = name;
         this.x = x;
         this.y = y;
-        VBox container = new VBox();
-        circle = new Circle();
-        circle.setFill(Color.BLUE);
-        Label label = new Label(name);
-        container.getChildren().addAll(circle, label);
-        container.setOnMouseClicked(new clickHandler());
+        //VBox container = new VBox();
+        this.circle = new Circle(8,Color.BLUE);
+        this.label = new Label(name);
+        getChildren().addAll(circle, label);
+        setLayoutX(x);
+        setLayoutY(y);
+
+
+        //container.getChildren().addAll(circle, label);
+        //container.setOnMouseClicked(new clickHandler());
     }
 
     public String getName(){
