@@ -124,19 +124,10 @@ public class PathFinder extends Application {
                 String medium = edgeData[2];
                 int distance = Integer.parseInt(edgeData[3]);
 
-                if(from != null && to != null)
-                    if(!graph.pathExists(from, to)) {
-                        graph.connect(from, to, medium, distance);
-                    }
-
-                System.out.println(graph.getNodes());
-
+                if(from != null && to != null && !graph.pathExists(from, to)) {
+                        graph.connect(from, to, medium, distance); }
             }
-
-
-
-
-
+            System.out.println(graph.getNodes());
         }
         catch(FileNotFoundException e){
             e.printStackTrace();
