@@ -2,12 +2,15 @@ import javafx.application.Application;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
+import javafx.scene.Cursor;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -19,6 +22,8 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Optional;
+import java.util.concurrent.Flow;
+
 //asd
 public class PathFinder extends Application {
     private BorderPane root;
@@ -27,6 +32,8 @@ public class PathFinder extends Application {
     private ImageView imageView;
     private Graph<Location> graph = new ListGraph<>();
     private Pane pane;
+    private FlowPane buttonList;
+    private Button newPlace;
     private boolean saved = false;
 
     @Override
@@ -83,7 +90,7 @@ public class PathFinder extends Application {
 
         fileMenu.getItems().addAll(newMap, open, save, saveImage, exit);
 
-        FlowPane buttonList = new FlowPane();
+        buttonList = new FlowPane();
         buttonList.setAlignment(Pos.CENTER);
         buttonList.setStyle("-fx-font-size:14");
         buttonList.setHgap(10);
@@ -92,13 +99,22 @@ public class PathFinder extends Application {
         findPath.setId("btnFindPath");
         Button showCon = new Button("Show Connection");
         showCon.setId("btnShowConnection");
-        Button newPlace = new Button("New Place");
+
+        newPlace = new Button("New Place");
         newPlace.setId("btnNewPlace");
+        newPlace.setOnAction(actionEvent -> {
+            newPlace.setDisable(true);
+            pane.setCursor(Cursor.CROSSHAIR);
+            pane.setOnMouseClicked(new NewPlaceClickHandler());
+        });
+
         Button newCon = new Button("New Connection");
         newCon.setId("btnNewConnection");
         Button changeCon = new Button("Change Connection");
         changeCon.setId("btnChangeConnection");
+
         buttonList.getChildren().addAll(findPath, showCon, newPlace, newCon, changeCon);
+        enableButtons(false); // Disables buttons in buttonList
 
         top.getChildren().addAll(menuBar, buttonList);
         root.setTop(top);
@@ -115,9 +131,18 @@ public class PathFinder extends Application {
         Image mapImage = new Image(fileName);
         imageView.setImage(mapImage);
         pane.getChildren().add(imageView);
+        enableButtons(true);
         //pane = new Pane(imageView);
         //root.setCenter(pane);
     }
+
+    private void enableButtons(boolean b){
+        buttonList.getChildren().forEach(node -> node.setDisable(!b));
+    }
+
+
+
+
 
     private void open() {
 
@@ -207,7 +232,6 @@ public class PathFinder extends Application {
     }
 
 
-
     class ExitHandler implements EventHandler<WindowEvent>{
 
         @Override
@@ -238,5 +262,31 @@ public class PathFinder extends Application {
         }
     }
 
+    class NewPlaceClickHandler implements EventHandler<MouseEvent>{
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            FlowPane fp = new FlowPane();
+            Label instruction = new Label("Name of place:");
+            instruction.setStyle("-fx-font-size:14");
+            TextField textField = new TextField();
+            textField.setPrefWidth(200);
+
+            fp.getChildren().addAll(instruction, textField);
+            fp.setOrientation(Orientation.HORIZONTAL);
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Name");
+            alert.setHeaderText(null);
+            fp.setAlignment(Pos.CENTER);
+            fp.setHgap(30);
+
+            alert.getDialogPane().setContent(fp);
+            alert.showAndWait();
+
+            newPlace.setDisable(false);
+        }
+
+
+    }
 
 }
