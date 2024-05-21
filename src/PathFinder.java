@@ -1,10 +1,13 @@
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
@@ -12,6 +15,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Optional;
 //asd
@@ -68,6 +73,8 @@ public class PathFinder extends Application {
         MenuItem saveImage = new MenuItem();
         saveImage.setText("Save Image");
         saveImage.setId("menuSaveImage");
+        saveImage.setOnAction(new SaveImageHandler());
+
         MenuItem exit = new MenuItem();
         exit.setText("Exit");
         exit.setId("menuExit");
@@ -97,8 +104,6 @@ public class PathFinder extends Application {
         root.setTop(top);
         imageView = new ImageView();
 
-
-
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
@@ -112,7 +117,6 @@ public class PathFinder extends Application {
         pane.getChildren().add(imageView);
         //pane = new Pane(imageView);
         //root.setCenter(pane);
-
     }
 
     private void open() {
@@ -220,6 +224,19 @@ public class PathFinder extends Application {
         }
     }
 
+    class SaveImageHandler implements EventHandler<ActionEvent>{
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            try{
+                WritableImage image = pane.snapshot(null, null);
+                BufferedImage bufferedImage = SwingFXUtils.fromFXImage(image, null);
+                ImageIO.write(bufferedImage, "png", new File("capture.png"));
+            } catch(IOException e){
+                Alert alert = new Alert(Alert.AlertType.ERROR, "IO-fel " + e.getMessage());
+                alert.showAndWait();
+            }
+        }
+    }
 
 
 }
