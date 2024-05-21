@@ -284,6 +284,7 @@ public class PathFinder extends Application {
             alert.showAndWait();
 
             newPlace.setDisable(false);
+            // del 3 och 4 kvar!
         }
 
 
