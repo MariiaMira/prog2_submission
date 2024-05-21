@@ -112,6 +112,7 @@ public class PathFinder extends Application {
     }
 
     private void open() {
+
         //Check om tidigare har sparats.
         if(!saved){
             Alert warning = new Alert(Alert.AlertType.CONFIRMATION);
@@ -125,7 +126,7 @@ public class PathFinder extends Application {
                 return;
             }
         }
-
+        pane.getChildren().clear();
         graph = new ListGraph<>();
         BufferedReader reader;
         try {
