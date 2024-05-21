@@ -1,4 +1,5 @@
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -9,6 +10,7 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 import java.io.*;
 import java.util.Optional;
@@ -30,10 +32,7 @@ public class PathFinder extends Application {
         pane = new Pane();
         pane.setId("outputArea");
         imageView = new ImageView();
-        //pane.getChildren().add(imageView);
         root.setCenter(pane);
-
-
 
         MenuBar menuBar = new MenuBar();
         menuBar.setId("menu");
@@ -63,14 +62,19 @@ public class PathFinder extends Application {
         MenuItem save = new MenuItem();
         save.setText("Save");
         save.setId("menuSaveFile");
+        save.setOnAction(actionEvent -> {
+            save();
+        });
         MenuItem saveImage = new MenuItem();
         saveImage.setText("Save Image");
         saveImage.setId("menuSaveImage");
         MenuItem exit = new MenuItem();
         exit.setText("Exit");
         exit.setId("menuExit");
-        fileMenu.getItems().addAll(newMap, open, save, saveImage, exit);
+        exit.setOnAction(actionEvent -> stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST)));
+        stage.setOnCloseRequest(new ExitHandler());
 
+        fileMenu.getItems().addAll(newMap, open, save, saveImage, exit);
 
         FlowPane buttonList = new FlowPane();
         buttonList.setAlignment(Pos.CENTER);
@@ -127,6 +131,7 @@ public class PathFinder extends Application {
             }
         }
         pane.getChildren().clear();
+        saved = false;
         graph = new ListGraph<>();
         BufferedReader reader;
         try {
@@ -168,7 +173,7 @@ public class PathFinder extends Application {
                 if(from != null && to != null && !graph.pathExists(from, to)) {
                     graph.connect(from, to, medium, distance); }
             }
-            //System.out.println(graph.getNodes());
+            reader.close();
         }
         catch(FileNotFoundException e){
             e.printStackTrace();
@@ -176,8 +181,45 @@ public class PathFinder extends Application {
         catch (IOException e){
             e.printStackTrace();
         }
-
-
     }
+
+    private void save(){
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter("test.graph"))){
+            writer.write("file:europa.gif\n");
+            for(Location location : graph.getNodes()) {
+                writer.write(location.getName() + ";" + location.getX() + ";" + location.getY() + ";");
+            }
+            writer.newLine();
+            for (Location location : graph.getNodes()){
+                for (Edge<Location> edge : graph.getEdgesFrom(location)){
+                    writer.write(location.getName() + ";" + edge.getDestination().getName() + ";" + edge.getName() + ";" + edge.getWeight() + "\n");
+                }
+            }
+            saved = true;
+        }
+        catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
+
+
+    class ExitHandler implements EventHandler<WindowEvent>{
+
+        @Override
+        public void handle(WindowEvent windowEvent) {
+            if(!saved){
+                Alert warning = new Alert(Alert.AlertType.CONFIRMATION);
+                warning.setTitle("WARNING!");
+                warning.setHeaderText("Unsaved changes, exit anyway?");
+                Optional<ButtonType> answer = warning.showAndWait();
+                if (answer.isPresent() && answer.get().equals(ButtonType.CANCEL)){
+                    windowEvent.consume();
+                }
+            }
+        }
+    }
+
+
 
 }
