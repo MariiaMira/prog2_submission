@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 
 import javax.imageio.ImageIO;
+import javax.swing.text.html.Option;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Optional;
@@ -281,13 +282,21 @@ public class PathFinder extends Application {
             fp.setHgap(30);
 
             alert.getDialogPane().setContent(fp);
-            alert.showAndWait();
 
-            newPlace.setDisable(false);
-            // del 3 och 4 kvar!
+            Optional<ButtonType> response = alert.showAndWait();
+            if(response.isPresent() && response.get() == ButtonType.OK){
+                String name = textField.getText(); // del 3 - hämta text och skapa location
+                double y = mouseEvent.getY();
+                double x = mouseEvent.getX();
+
+                Location location = new Location(name, x, y); // TODO location blir fel
+                //location.setId(name);
+                //graph.add(location);
+                pane.getChildren().add(location); // lägg till location på kartan
+            }
+            pane.setCursor(Cursor.DEFAULT);
+            newPlace.setDisable(false); // aktivera knappen igen
+            // TODO klickar man på kartan så öppnas new place automatiskt
         }
-
-
     }
-
 }
