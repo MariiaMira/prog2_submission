@@ -1,6 +1,3 @@
-import javafx.scene.Group;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -13,15 +10,8 @@ public class Location extends Circle {
         super(x, y, 8);
         setFill(circleColor);
         this.name = name;
-
-        this.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleMouseClick);
     }
-
-    private void handleMouseClick(MouseEvent event) {
-        changeCircleColor();
-    }
-
-    private void changeCircleColor() {
+    public void changeCircleColor() {
         if (circleColor.equals(Color.BLUE)) {
             circleColor = Color.RED;
         } else {
@@ -32,6 +22,10 @@ public class Location extends Circle {
 
     public String getName(){
         return name;
+    }
+
+    public Color getCircleColor() {
+        return circleColor;
     }
 
     public String toString(){

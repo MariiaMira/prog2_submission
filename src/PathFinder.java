@@ -11,15 +11,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.FlowPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.Optional;
 
 public class PathFinder extends Application {
@@ -32,6 +31,7 @@ public class PathFinder extends Application {
     private FlowPane buttonList;
     private Button newPlace;
     private boolean saved = true;
+    private ArrayList<Location> clickedLocations;
 
     @Override
     public void start(Stage stage) {
@@ -107,6 +107,7 @@ public class PathFinder extends Application {
 
         Button newCon = new Button("New Connection");
         newCon.setId("btnNewConnection");
+        newCon.setOnAction(new NewConnectionHandler());
         Button changeCon = new Button("Change Connection");
         changeCon.setId("btnChangeConnection");
 
@@ -117,11 +118,12 @@ public class PathFinder extends Application {
         root.setTop(top);
         imageView = new ImageView();
 
+        clickedLocations = new ArrayList<Location>();
+
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.setResizable(false);
         stage.show();
-
     }
 
     private void loadMap(String fileName) {
@@ -173,7 +175,7 @@ public class PathFinder extends Application {
                 double x = Double.parseDouble(parts[i+1]);
                 double y = Double.parseDouble(parts[i+2]);
                 Location location = new Location(name, x, y);
-
+                location.setOnMouseClicked(new HandleMouseClick());
                 Label label = new Label(name);
                 label.setLayoutX(x);
                 label.setLayoutY(y + 10);
@@ -291,13 +293,11 @@ public class PathFinder extends Application {
                 if (!placeName.isEmpty()) {
                     double x = mouseEvent.getX();
                     double y = mouseEvent.getY();
-
-
-
-
-
                     // create a new Location
                     Location newLocation = new Location(placeName, x, y);
+
+                    newLocation.setOnMouseClicked(new HandleMouseClick());
+
                     Label label = new Label(placeName);
                     label.setLayoutX(x);
                     label.setLayoutY(y + 10);
@@ -320,5 +320,79 @@ public class PathFinder extends Application {
         }
 
     }
+
+    class NewConnectionHandler implements EventHandler<ActionEvent> {
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            if (clickedLocations.size() < 2) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error!");
+                errorAlert.setContentText("Two places must be selected!");
+                errorAlert.setHeaderText(null);
+                errorAlert.showAndWait();
+            }
+            else if (graph.pathExists(clickedLocations.getFirst(), clickedLocations.getLast())){
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error!");
+                errorAlert.setContentText("Path already exists!");
+                errorAlert.setHeaderText(null);
+                errorAlert.showAndWait();
+            }
+            else {
+                GridPane windowPane = new GridPane();
+                Label nameLabel = new Label("Name: ");
+                nameLabel.setStyle("-fx-font-size:14");
+                TextField nameTextField = new TextField();
+                nameTextField.setPrefWidth(200);
+
+                Label timeLabel = new Label("Time: ");
+                timeLabel.setStyle("-fx-font-size:14");
+                TextField timeTextField = new TextField();
+                timeTextField.setPrefWidth(200);
+
+                windowPane.addRow(0, nameLabel, nameTextField);
+                windowPane.setVgap(5);
+                windowPane.addRow(1, timeLabel, timeTextField);
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Connection");
+                alert.setHeaderText("Connection from " + clickedLocations.getFirst().getName() + " to " + clickedLocations.getLast().getName());
+                windowPane.setAlignment(Pos.CENTER);
+                windowPane.setHgap(30);
+
+                alert.getDialogPane().setContent(windowPane);
+                Optional<ButtonType> response = alert.showAndWait();
+                if (response.isPresent() && response.get() == ButtonType.OK) {
+                    String name = nameTextField.getText().trim();
+                    int time = Integer.parseInt(timeTextField.getText().trim());
+                    if (!name.isEmpty() && Character.isDigit(time)) {
+                        graph.connect(clickedLocations.getFirst(), clickedLocations.getLast(), name, time);
+                    }
+                    System.out.println(graph.pathExists(clickedLocations.getFirst(), clickedLocations.getLast()));
+                }
+            }
+        }
+    }
+
+    class HandleMouseClick implements EventHandler<MouseEvent> {
+
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            Location clicked = (Location) mouseEvent.getSource();
+            if (clicked.getCircleColor().equals(Color.BLUE)){
+                if(clickedLocations.size() < 2){
+                    clicked.changeCircleColor();
+                    clickedLocations.add(clicked);
+                }
+            } else {
+                clicked.changeCircleColor();
+                clickedLocations.remove(clicked);
+            }
+
+            System.out.println(clickedLocations);
+        }
+    }
+
 
 }
