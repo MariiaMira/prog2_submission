@@ -129,6 +129,7 @@ public class PathFinder extends Application {
         Image mapImage = new Image(fileName);
         imageView.setImage(mapImage);
         pane.getChildren().add(imageView);
+        imageView.setDisable(true);
         enableButtons(true);
         //pane = new Pane(imageView);
         //root.setCenter(pane);
@@ -177,7 +178,7 @@ public class PathFinder extends Application {
                 location.setId(name);
                 graph.add(location);
                 pane.getChildren().add(location);
-                location.relocate(x,y);
+                location.relocate(x-8,y-8);
 
             }
             while((line = reader.readLine()) != null){
@@ -312,12 +313,12 @@ public class PathFinder extends Application {
 
     }
 
-    class ClickHandler implements EventHandler<MouseEvent>{
+    /*class ClickHandler implements EventHandler<MouseEvent>{
         @Override
         public void handle(MouseEvent mouseEvent) {
             Location element = (Location) mouseEvent.getSource();
             element.paintCovered(Color.valueOf("0xff0000ff"));
         }
-    }
+    }*/
 
 }
