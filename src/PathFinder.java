@@ -5,7 +5,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -174,13 +173,12 @@ public class PathFinder extends Application {
                 double x = Double.parseDouble(parts[i+1]);
                 double y = Double.parseDouble(parts[i+2]);
                 Location location = new Location(name, x, y);
-                location.setOnMouseClicked(new ClickHandler());
+                //location.setOnMouseClicked(new ClickHandler());
                 location.setId(name);
                 graph.add(location);
                 pane.getChildren().add(location);
-                location.relocate(x -10,y-10);
-                //location.setLayoutX(x);
-                //location.setLayoutY(y);
+                location.relocate(x,y);
+
             }
             while((line = reader.readLine()) != null){
                 String[] edgeData = line.split(";");
@@ -318,7 +316,7 @@ public class PathFinder extends Application {
         @Override
         public void handle(MouseEvent mouseEvent) {
             Location element = (Location) mouseEvent.getSource();
-            element.paintCovered(Color.RED);
+            element.paintCovered(Color.valueOf("0xff0000ff"));
         }
     }
 
