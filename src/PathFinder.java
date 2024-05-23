@@ -15,7 +15,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.imageio.ImageIO;
@@ -312,13 +311,5 @@ public class PathFinder extends Application {
         }
 
     }
-
-    /*class ClickHandler implements EventHandler<MouseEvent>{
-        @Override
-        public void handle(MouseEvent mouseEvent) {
-            Location element = (Location) mouseEvent.getSource();
-            element.paintCovered(Color.valueOf("0xff0000ff"));
-        }
-    }*/
 
 }
