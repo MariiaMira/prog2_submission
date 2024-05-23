@@ -6,6 +6,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.TextAlignment;
 
 public class Location extends Canvas {
     private String name;
@@ -22,16 +23,17 @@ public class Location extends Canvas {
         this.y = y;
         this.circle = new Circle(8,Color.BLUE);
         this.label = new Label(name);
-        //getChildren().addAll(circle, label);
-        paintCovered();
-        gContext.fillOval(0,0,16,16);
-        gContext.setFill(Color.BLACK);
+
+
+        //gContext.setFill(Color.BLACK);
         gContext.fillText(name, 0, 30);
+        paintCovered();
 
     }
 
     public void paintCovered(){
         gContext.setFill(Color.BLUE);
+        gContext.fillOval(0,0,16,16);
     }
 
     public String getName(){
