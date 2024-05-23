@@ -5,6 +5,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -15,6 +16,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.imageio.ImageIO;
@@ -172,6 +174,7 @@ public class PathFinder extends Application {
                 double x = Double.parseDouble(parts[i+1]);
                 double y = Double.parseDouble(parts[i+2]);
                 Location location = new Location(name, x, y);
+                location.setOnMouseClicked(new ClickHandler());
                 location.setId(name);
                 graph.add(location);
                 pane.getChildren().add(location);
@@ -306,9 +309,17 @@ public class PathFinder extends Application {
             }
             newPlace.setDisable(false);
             pane.setCursor(Cursor.DEFAULT);
+            pane.setOnMouseClicked(null);
         }
 
+    }
 
+    class ClickHandler implements EventHandler<MouseEvent>{
+        @Override
+        public void handle(MouseEvent mouseEvent) {
+            Location element = (Location) mouseEvent.getSource();
+            element.paintCovered(Color.RED);
+        }
     }
 
 }

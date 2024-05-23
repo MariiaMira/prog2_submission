@@ -17,7 +17,7 @@ public class Location extends Canvas {
     private GraphicsContext gContext = getGraphicsContext2D();
 
     public Location(String name, double x, double y){
-        super(75, 75);
+        super(60, 60);
         this.name = name;
         this.x = x;
         this.y = y;
@@ -27,12 +27,13 @@ public class Location extends Canvas {
 
         //gContext.setFill(Color.BLACK);
         gContext.fillText(name, 0, 30);
-        paintCovered();
+        gContext.setTextAlign(TextAlignment.JUSTIFY);
+        paintCovered(Color.BLUE);
 
     }
 
-    public void paintCovered(){
-        gContext.setFill(Color.BLUE);
+    public void paintCovered(Color color){
+        gContext.setFill(color);
         gContext.fillOval(0,0,16,16);
     }
 
