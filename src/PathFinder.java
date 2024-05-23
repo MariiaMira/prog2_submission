@@ -1,14 +1,10 @@
 import javafx.application.Application;
-import javafx.beans.value.ObservableMapValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -19,15 +15,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
 import java.util.Optional;
 
 public class PathFinder extends Application {
@@ -35,7 +27,7 @@ public class PathFinder extends Application {
     private VBox top;
 
     private ImageView imageView;
-    private Graph<String> graph = new ListGraph<>();
+    private Graph<Location> graph = new ListGraph<>();
     private Pane pane;
     private FlowPane buttonList;
     private Button newPlace;
@@ -179,31 +171,24 @@ public class PathFinder extends Application {
                 String name = parts[i];
                 double x = Double.parseDouble(parts[i+1]);
                 double y = Double.parseDouble(parts[i+2]);
-
-                //Location location = new Location(name, x, y);
-                //location.setId(name);
-                VBox locationBox = new VBox();
-                Circle circle = new Circle(8, Color.BLUE);
-                Label nameLabel = new Label(name);
-                locationBox.getChildren().addAll(circle, nameLabel);
-                locationBox.setId(name);
-
-                graph.add(name);
-                pane.getChildren().add(locationBox);
-                locationBox.relocate(x,y);
+                Location location = new Location(name, x, y);
+                location.setId(name);
+                graph.add(location);
+                pane.getChildren().add(location);
+                location.relocate(x -10,y-10);
                 //location.setLayoutX(x);
                 //location.setLayoutY(y);
             }
             while((line = reader.readLine()) != null){
                 String[] edgeData = line.split(";");
 
-                String from = null;
-                String to = null;
-                for(String l : graph.getNodes()){
-                    if(edgeData[0].equalsIgnoreCase(l)){
+                Location from = null;
+                Location to = null;
+                for(Location l : graph.getNodes()){
+                    if(edgeData[0].equals(l.getName())){
                         from = l;
                     }
-                    if(edgeData[1].equalsIgnoreCase(l)){
+                    if(edgeData[1].equals(l.getName())){
                         to = l;
                     }
                 }
@@ -227,26 +212,13 @@ public class PathFinder extends Application {
     private void save(){
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("test.graph"))){
             writer.write("file:europa.gif\n");
-            ObservableList<Node> children = FXCollections.observableArrayList(pane.getChildren());
-
-            for(Node l: children){
-                if(l instanceof VBox){
-                    double x = l.getLayoutX();
-                    double y = l.getLayoutY();
-                    String name = l.getId();
-                            writer.write(name + ";" + x + ";" + y + ";");
-                }
+            for(Location location : graph.getNodes()) {
+                writer.write(location.getName() + ";" + location.getX() + ";" + location.getY() + ";");
             }
-
-            /*for(String location : graph.getNodes()) {
-                writer.write(location + ";" + location.getX() + ";" + location.getY() + ";");
-            }
-
-             */
             writer.newLine();
-            for (String location : graph.getNodes()){
-                for (Edge<String> edge : graph.getEdgesFrom(location)){
-                    writer.write(location + ";" + edge.getDestination() + ";" + edge.getName() + ";" + edge.getWeight() + "\n");
+            for (Location location : graph.getNodes()){
+                for (Edge<Location> edge : graph.getEdgesFrom(location)){
+                    writer.write(location.getName() + ";" + edge.getDestination().getName() + ";" + edge.getName() + ";" + edge.getWeight() + "\n");
                 }
             }
             saved = true;
@@ -315,19 +287,16 @@ public class PathFinder extends Application {
                     double y = mouseEvent.getY();
 
                     // create a new Location
-                    //Location newLocation = new Location(placeName, x, y);
-                    VBox locationBox = new VBox();
-                    Circle circle = new Circle(8, Color.BLUE);
-                    Label nameLabel = new Label(placeName);
-                    locationBox.getChildren().addAll(circle, nameLabel);
-                    locationBox.setId(placeName);
+                    Location newLocation = new Location(placeName, x, y);
+
+                    newLocation.setId(placeName);
 
                     // add it to the graph
-                    graph.add(placeName);
+                    graph.add(newLocation);
 
                     // Add it to the pane
-                    pane.getChildren().add(locationBox);
-                    locationBox.relocate(x - 10, y - 10);
+                    pane.getChildren().add(newLocation);
+                    newLocation.relocate(x - 10, y - 10);
 
                     saved = false; // changes made without saving
                 } /*else {
@@ -337,7 +306,6 @@ public class PathFinder extends Application {
             }
             newPlace.setDisable(false);
             pane.setCursor(Cursor.DEFAULT);
-            pane.setOnMouseClicked(null);
         }
 
 
