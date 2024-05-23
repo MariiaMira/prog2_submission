@@ -280,7 +280,6 @@ public class PathFinder extends Application {
 
             alert.getDialogPane().setContent(fp);
             Optional<ButtonType> answer = alert.showAndWait();
-            //alert.showAndWait();
 
             if (answer.isPresent() && answer.get() == ButtonType.OK) {
                 String placeName = textField.getText().trim();
