@@ -22,9 +22,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.Optional;
-import java.util.concurrent.Flow;
 
-//asd
 public class PathFinder extends Application {
     private BorderPane root;
     private VBox top;
@@ -303,10 +301,10 @@ public class PathFinder extends Application {
                     newLocation.relocate(x - 10, y - 10);
 
                     saved = false; // changes made without saving
-                } else {
+                } /*else {
                     Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Place name is empty."); //ska vi kolla att fältet innehåller något?
                     errorAlert.showAndWait();
-                }
+                }*/
             }
             newPlace.setDisable(false);
             pane.setCursor(Cursor.DEFAULT);
