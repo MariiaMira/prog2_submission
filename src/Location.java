@@ -16,16 +16,9 @@ public class Location extends VBox {
         this.name = name;
         this.x = x;
         this.y = y;
-        //VBox container = new VBox();
         this.circle = new Circle(8,Color.BLUE);
         this.label = new Label(name);
         getChildren().addAll(circle, label);
-        //setLayoutX(x);
-        //setLayoutY(y);
-
-
-        //container.getChildren().addAll(circle, label);
-        //container.setOnMouseClicked(new clickHandler());
     }
 
     public String getName(){
