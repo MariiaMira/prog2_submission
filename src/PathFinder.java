@@ -173,11 +173,16 @@ public class PathFinder extends Application {
                 double x = Double.parseDouble(parts[i+1]);
                 double y = Double.parseDouble(parts[i+2]);
                 Location location = new Location(name, x, y);
+
+                Label label = new Label(name);
+                label.setLayoutX(x);
+                label.setLayoutY(y + 10);
+
                 //location.setOnMouseClicked(new ClickHandler());
                 location.setId(name);
                 graph.add(location);
-                pane.getChildren().add(location);
-                location.relocate(x-8,y-8);
+                pane.getChildren().addAll(location,label);
+                //location.relocate(x,y);
 
             }
             while((line = reader.readLine()) != null){
@@ -214,7 +219,7 @@ public class PathFinder extends Application {
         try(BufferedWriter writer = new BufferedWriter(new FileWriter("test.graph"))){
             writer.write("file:europa.gif\n");
             for(Location location : graph.getNodes()) {
-                writer.write(location.getName() + ";" + location.getX() + ";" + location.getY() + ";");
+                writer.write(location.getName() + ";" + location.getCenterX() + ";" + location.getCenterY() + ";");
             }
             writer.newLine();
             for (Location location : graph.getNodes()){
@@ -287,8 +292,15 @@ public class PathFinder extends Application {
                     double x = mouseEvent.getX();
                     double y = mouseEvent.getY();
 
+
+
+
+
                     // create a new Location
                     Location newLocation = new Location(placeName, x, y);
+                    Label label = new Label(placeName);
+                    label.setLayoutX(x);
+                    label.setLayoutY(y + 10);
 
                     newLocation.setId(placeName);
 
@@ -296,14 +308,11 @@ public class PathFinder extends Application {
                     graph.add(newLocation);
 
                     // Add it to the pane
-                    pane.getChildren().add(newLocation);
-                    newLocation.relocate(x - 10, y - 10);
+                    pane.getChildren().addAll(newLocation,label);
+                    //newLocation.relocate(x, y);
 
                     saved = false; // changes made without saving
-                } /*else {
-                    Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Place name is empty."); //ska vi kolla att fältet innehåller något?
-                    errorAlert.showAndWait();
-                }*/
+                }
             }
             newPlace.setDisable(false);
             pane.setCursor(Cursor.DEFAULT);
