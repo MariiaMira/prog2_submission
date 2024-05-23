@@ -332,7 +332,7 @@ public class PathFinder extends Application {
                 errorAlert.setHeaderText(null);
                 errorAlert.showAndWait();
             }
-            else if (graph.pathExists(clickedLocations.getFirst(), clickedLocations.getLast())){
+            else if (graph.pathExists(clickedLocations.get(0), clickedLocations.get(1))){
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Error!");
                 errorAlert.setContentText("Path already exists!");
@@ -357,7 +357,7 @@ public class PathFinder extends Application {
 
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.setTitle("Connection");
-                alert.setHeaderText("Connection from " + clickedLocations.getFirst().getName() + " to " + clickedLocations.getLast().getName());
+                alert.setHeaderText("Connection from " + clickedLocations.get(0).getName() + " to " + clickedLocations.get(1).getName());
                 windowPane.setAlignment(Pos.CENTER);
                 windowPane.setHgap(30);
 
@@ -365,11 +365,15 @@ public class PathFinder extends Application {
                 Optional<ButtonType> response = alert.showAndWait();
                 if (response.isPresent() && response.get() == ButtonType.OK) {
                     String name = nameTextField.getText().trim();
-                    int time = Integer.parseInt(timeTextField.getText().trim());
-                    if (!name.isEmpty() && Character.isDigit(time)) {
-                        graph.connect(clickedLocations.getFirst(), clickedLocations.getLast(), name, time);
+                    try{
+                        int time = Integer.parseInt(timeTextField.getText().trim());
+                        if (!name.isEmpty()) {
+                            graph.connect(clickedLocations.get(0), clickedLocations.get(1), name, time);
+                        }
+                    } catch (NumberFormatException e) {
+                        e.printStackTrace();
                     }
-                    System.out.println(graph.pathExists(clickedLocations.getFirst(), clickedLocations.getLast()));
+
                 }
             }
         }
