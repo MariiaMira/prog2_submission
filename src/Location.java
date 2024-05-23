@@ -28,7 +28,7 @@ public class Location extends Canvas {
 
     public void paintCovered(Color color){
         graphicsContext.setFill(color);
-        graphicsContext.fillOval(30,30,16,16);
+        graphicsContext.fillOval(0,0,16,16);
     }
 
     private void handleMouseClick(MouseEvent event) {
@@ -36,7 +36,7 @@ public class Location extends Canvas {
         double clickY = event.getY();
 
         // Calculate if the click is within the bounds of the oval centered at (8, 8) with a radius of 8
-        if (Math.pow(clickX - 30, 2) + Math.pow(clickY - 30, 2) <= Math.pow(8, 2)) {
+        if (Math.pow(clickX - 8, 2) + Math.pow(clickY - 8, 2) <= Math.pow(8, 2)) {
             ovalColor = ovalColor.equals(Color.BLUE) ? Color.RED : Color.BLUE;
             paintCovered(ovalColor);
         }
