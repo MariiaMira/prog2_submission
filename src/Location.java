@@ -1,5 +1,6 @@
 import javafx.scene.Group;
 import javafx.scene.control.Label;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 
@@ -25,8 +26,23 @@ public class Location extends Group {
 
         this.getChildren().addAll(circle, label);
 
+        this.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleMouseClick);
     }
 
+    private void handleMouseClick(MouseEvent event) {
+        if (circle.contains(event.getX() - circle.getCenterX(), event.getY() - circle.getCenterY())) {
+            changeCircleColor();
+        }
+    }
+
+    private void changeCircleColor() {
+        if (circleColor.equals(Color.BLUE)) {
+            circleColor = Color.RED;
+        } else {
+            circleColor = Color.BLUE;
+        }
+        circle.setFill(circleColor);
+    }
 
 
     public String getName(){
