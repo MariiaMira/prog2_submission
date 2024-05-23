@@ -34,7 +34,7 @@ public class PathFinder extends Application {
     private Pane pane;
     private FlowPane buttonList;
     private Button newPlace;
-    private boolean saved = false;
+    private boolean saved = true;
 
     @Override
     public void start(Stage stage) {
@@ -281,9 +281,35 @@ public class PathFinder extends Application {
             fp.setHgap(30);
 
             alert.getDialogPane().setContent(fp);
-            alert.showAndWait();
+            Optional<ButtonType> answer = alert.showAndWait();
+            //alert.showAndWait();
 
+            if (answer.isPresent() && answer.get() == ButtonType.OK) {
+                String placeName = textField.getText().trim();
+                if (!placeName.isEmpty()) {
+                    double x = mouseEvent.getX();
+                    double y = mouseEvent.getY();
+
+                    // create a new Location
+                    Location newLocation = new Location(placeName, x, y);
+
+                    newLocation.setId(placeName);
+
+                    // add it to the graph
+                    graph.add(newLocation);
+
+                    // Add it to the pane
+                    pane.getChildren().add(newLocation);
+                    newLocation.relocate(x - 10, y - 10);
+
+                    saved = false; // changes made without saving
+                } else {
+                    Alert errorAlert = new Alert(Alert.AlertType.ERROR, "Place name is empty."); //ska vi kolla att fältet innehåller något?
+                    errorAlert.showAndWait();
+                }
+            }
             newPlace.setDisable(false);
+            pane.setCursor(Cursor.DEFAULT);
         }
 
 
