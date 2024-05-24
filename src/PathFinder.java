@@ -98,7 +98,7 @@ public class PathFinder extends Application {
         findPath.setId("btnFindPath");
         Button showCon = new Button("Show Connection");
         showCon.setId("btnShowConnection");
-
+        showCon.setOnAction(new ShowConnectionHandler());
         newPlace = new Button("New Place");
         newPlace.setId("btnNewPlace");
         newPlace.setOnAction(actionEvent -> {
@@ -421,6 +421,59 @@ public class PathFinder extends Application {
         }
     }
 
+    class ShowConnectionHandler implements EventHandler<ActionEvent> {
+        @Override
+        public void handle(ActionEvent event) {
+            if (clickedLocations.size() != 2) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error!");
+                errorAlert.setContentText("Two places must be selected!");
+                errorAlert.setHeaderText(null);
+                errorAlert.showAndWait();
+                return;
+            }
+            Location location1 = clickedLocations.get(0);
+            Location location2 = clickedLocations.get(1);
+
+            Edge<Location> connection = graph.getEdgeBetween(location1, location2);
+            if (connection == null) {
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error!");
+                errorAlert.setContentText("There is no connection between the locations.");
+                errorAlert.setHeaderText(null);
+                errorAlert.showAndWait();
+            } else {
+                GridPane windowPane = new GridPane();
+                Label nameLabel = new Label("Name: ");
+                nameLabel.setStyle("-fx-font-size:14");
+                TextField nameTextField = new TextField(graph.getEdgeBetween(location1, location2).getName());
+                nameTextField.setDisable(false);
+                nameTextField.setPrefWidth(200);
+
+                Label timeLabel = new Label("Time: ");
+                timeLabel.setStyle("-fx-font-size:14");
+                TextField timeTextField = new TextField(String.valueOf(graph.getEdgeBetween(location1,location2).getWeight()));
+                timeTextField.setDisable(false);
+                timeTextField.setPrefWidth(200);
+
+                windowPane.addRow(0, nameLabel, nameTextField);
+                windowPane.setVgap(5);
+                windowPane.addRow(1, timeLabel, timeTextField);
+
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.setTitle("Connection");
+                alert.setHeaderText("Connection from " + location1.getName() + " to " + location2.getName());
+                windowPane.setAlignment(Pos.CENTER);
+                windowPane.setHgap(30);
+
+                alert.getDialogPane().setContent(windowPane);
+                alert.showAndWait();
+            }
+        }
+
+    }
+
+
     class HandleMouseClick implements EventHandler<MouseEvent> {
 
         @Override
@@ -435,8 +488,6 @@ public class PathFinder extends Application {
                 clicked.changeCircleColor();
                 clickedLocations.remove(clicked);
             }
-
-            //System.out.println(clickedLocations);
         }
     }
 
