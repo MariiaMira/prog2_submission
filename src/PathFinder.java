@@ -142,7 +142,6 @@ public class PathFinder extends Application {
         buttonList.getChildren().forEach(node -> node.setDisable(!b));
     }
 
-
     private void open() {
         //Check om tidigare har sparats.
         if(!saved){
@@ -492,10 +491,10 @@ public class PathFinder extends Application {
         }
     }
 
-    private void triggerSelectionAlert(){
+    private void triggerSelectionAlert(String message){
         Alert errorAlert = new Alert(Alert.AlertType.ERROR);
         errorAlert.setTitle("Error!");
-        errorAlert.setContentText("Two places must be selected!");
+        errorAlert.setContentText(message);
         errorAlert.setHeaderText(null);
         errorAlert.showAndWait();
     }
@@ -562,6 +561,41 @@ public class PathFinder extends Application {
         }
     }
 
+    class FindPathHandler implements EventHandler<ActionEvent> {
+
+
+        // installera hos btnFindPath.setOnAction
+
+        // Hämta två markerade locations
+
+        // OM - två valda platser & path exists
+        // hämtar ListGraph.getPath()
+        // Öppnar dialogruta alerttype info
+        // ANNARS - inte två platser eller !pathexist - Error som visas i new connection
+
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            if (clickedLocations.size() != 2 ) {
+                triggerSelectionAlert("Must select two locations");
+                return;
+            }
+            else if(!graph.pathExists(clickedLocations.get(0), clickedLocations.get(1))){
+               triggerSelectionAlert("Path does not exist");
+               return;
+            }
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+
+            TextArea tx = new TextArea(); // testa stroing
+            List<Edge<Location>> path = graph.getPath(clickedLocations.get(0), clickedLocations.get(1));
+            tx.setText(path.toString());
+
+
+            alert.showAndWait();
+
+
+        }
+    }
 
 
 
