@@ -555,17 +555,6 @@ public class PathFinder extends Application {
     }
 
     class FindPathHandler implements EventHandler<ActionEvent> {
-
-
-        // installera hos btnFindPath.setOnAction
-
-        // Hämta två markerade locations
-
-        // OM - två valda platser & path exists
-        // hämtar ListGraph.getPath()
-        // Öppnar dialogruta alerttype info
-        // ANNARS - inte två platser eller !pathexist - Error som visas i new connection
-
         @Override
         public void handle(ActionEvent actionEvent) {
             if (clickedLocations.size() != 2 ) {
