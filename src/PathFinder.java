@@ -474,7 +474,7 @@ public class PathFinder extends Application {
 
     }
 
-
+//change
     class HandleMouseClick implements EventHandler<MouseEvent> {
 
         @Override
