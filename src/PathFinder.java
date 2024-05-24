@@ -588,7 +588,4 @@ public class PathFinder extends Application {
             alert.showAndWait();
         }
     }
-
-
-
 }
