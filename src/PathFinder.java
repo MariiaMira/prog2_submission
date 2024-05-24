@@ -133,6 +133,7 @@ public class PathFinder extends Application {
         imageView.setImage(mapImage);
         pane.getChildren().add(imageView);
         imageView.setDisable(true);
+        clickedLocations.clear();
         enableButtons(true);
     }
 
@@ -170,8 +171,8 @@ public class PathFinder extends Application {
                 String name = parts[i];
                 double x = Double.parseDouble(parts[i+1]);
                 double y = Double.parseDouble(parts[i+2]);
+
                 Location location = new Location(name, x, y);
-                location.setOnMouseClicked(new HandleMouseClick());
                 Label label = new Label(name);
                 label.setLayoutX(x);
                 label.setLayoutY(y + 10);
@@ -179,6 +180,7 @@ public class PathFinder extends Application {
                 location.setId(name);
                 graph.add(location);
                 pane.getChildren().addAll(location,label);
+                location.setOnMouseClicked(new HandleMouseClick());
 
             }
             while((line = reader.readLine()) != null){
@@ -256,7 +258,7 @@ public class PathFinder extends Application {
     }
 
     private void save(){
-        try(BufferedWriter writer = new BufferedWriter(new FileWriter("test.graph"))){
+        try(BufferedWriter writer = new BufferedWriter(new FileWriter("europa.graph"))){
             writer.write("file:europa.gif\n");
             for(Location location : graph.getNodes()) {
                 writer.write(location.getName() + ";" + location.getCenterX() + ";" + location.getCenterY() + ";");
@@ -333,7 +335,6 @@ public class PathFinder extends Application {
                     double y = mouseEvent.getY();
                     // create a new Location
                     Location newLocation = new Location(placeName, x, y);
-
                     newLocation.setOnMouseClicked(new HandleMouseClick());
 
                     Label label = new Label(placeName);
