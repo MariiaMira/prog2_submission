@@ -112,6 +112,7 @@ public class PathFinder extends Application {
         newCon.setOnAction(new NewConnectionHandler());
         Button changeCon = new Button("Change Connection");
         changeCon.setId("btnChangeConnection");
+        changeCon.setOnAction(new ChangeConnectionHandler());
 
         buttonList.getChildren().addAll(findPath, showCon, newPlace, newCon, changeCon);
         enableButtons(false); // Disables buttons in buttonList
@@ -487,6 +488,76 @@ public class PathFinder extends Application {
             } else {
                 clicked.changeCircleColor();
                 clickedLocations.remove(clicked);
+            }
+        }
+    }
+
+    private void triggerSelectionAlert(){
+        Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+        errorAlert.setTitle("Error!");
+        errorAlert.setContentText("Two places must be selected!");
+        errorAlert.setHeaderText(null);
+        errorAlert.showAndWait();
+    }
+
+    class ChangeConnectionHandler implements EventHandler<ActionEvent>{
+        @Override
+        public void handle(ActionEvent actionEvent) {
+            if (clickedLocations.size() < 2) {
+                triggerSelectionAlert();
+                return;
+            }
+            else if(graph.getEdgeBetween(clickedLocations.get(0), clickedLocations.get(1)) == null){
+                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
+                errorAlert.setTitle("Error!");
+                errorAlert.setContentText("No path found!");
+                errorAlert.setHeaderText(null);
+                errorAlert.showAndWait();
+                return;
+            }
+
+
+            Edge<Location> edge = graph.getEdgeBetween(clickedLocations.get(0), clickedLocations.get(1));
+            String name = edge.getName();
+
+            GridPane windowPane = new GridPane();
+            Label nameLabel = new Label("Name: ");
+            nameLabel.setStyle("-fx-font-size:14");
+            TextField nameTextField = new TextField();
+            nameTextField.setText(name);
+            nameTextField.setPrefWidth(200);
+            nameTextField.setEditable(false);
+
+            Label timeLabel = new Label("Time: ");
+            timeLabel.setStyle("-fx-font-size:14");
+            TextField timeTextField = new TextField();
+            timeTextField.setPrefWidth(200);
+
+            windowPane.addRow(0, nameLabel, nameTextField);
+            windowPane.setVgap(5);
+            windowPane.addRow(1, timeLabel, timeTextField);
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Connection");
+            alert.setHeaderText("Connection from " + clickedLocations.get(0).getName() + " to " + clickedLocations.get(1).getName());
+            windowPane.setAlignment(Pos.CENTER);
+            windowPane.setHgap(30);
+
+            alert.getDialogPane().setContent(windowPane);
+
+            Optional<ButtonType> response = alert.showAndWait();
+            if (response.isPresent() && response.get() == ButtonType.OK) {
+                try{
+                    int newTime = Integer.parseInt(timeTextField.getText().trim());
+                    edge.setWeight(newTime);
+                    Location from = clickedLocations.get(0);
+                    Location to = clickedLocations.get(1);
+                    if(graph.getEdgeBetween(to, from) != null){
+                        graph.getEdgeBetween(to, from).setWeight(newTime);
+                    }
+                } catch (NumberFormatException e) {
+                    e.printStackTrace();
+                }
             }
         }
     }
