@@ -365,11 +365,7 @@ public class PathFinder extends Application {
         @Override
         public void handle(ActionEvent actionEvent) {
             if (clickedLocations.size() < 2) {
-                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Error!");
-                errorAlert.setContentText("Two places must be selected!");
-                errorAlert.setHeaderText(null);
-                errorAlert.showAndWait();
+                triggerSelectionAlert("Two locations must be selected!");
             }
             //else if (graph.pathExists(clickedLocations.get(0), clickedLocations.get(1))){
             else if (graph.getEdgeBetween(clickedLocations.get(0), clickedLocations.get(1)) != null){
@@ -425,11 +421,7 @@ public class PathFinder extends Application {
         @Override
         public void handle(ActionEvent event) {
             if (clickedLocations.size() != 2) {
-                Alert errorAlert = new Alert(Alert.AlertType.ERROR);
-                errorAlert.setTitle("Error!");
-                errorAlert.setContentText("Two places must be selected!");
-                errorAlert.setHeaderText(null);
-                errorAlert.showAndWait();
+                triggerSelectionAlert("Two locations must be selected!");
                 return;
             }
             Location location1 = clickedLocations.get(0);
@@ -503,7 +495,7 @@ public class PathFinder extends Application {
         @Override
         public void handle(ActionEvent actionEvent) {
             if (clickedLocations.size() < 2) {
-                triggerSelectionAlert();
+                triggerSelectionAlert("Two locations must be selected!");
                 return;
             }
             else if(graph.getEdgeBetween(clickedLocations.get(0), clickedLocations.get(1)) == null){
@@ -576,11 +568,11 @@ public class PathFinder extends Application {
         @Override
         public void handle(ActionEvent actionEvent) {
             if (clickedLocations.size() != 2 ) {
-                triggerSelectionAlert("Must select two locations");
+                triggerSelectionAlert("Two locations must be selected!");
                 return;
             }
             else if(!graph.pathExists(clickedLocations.get(0), clickedLocations.get(1))){
-               triggerSelectionAlert("Path does not exist");
+               triggerSelectionAlert("Path does not exist.");
                return;
             }
 
