@@ -1,10 +1,12 @@
 import javafx.application.Application;
+import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
+import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -13,13 +15,13 @@ import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Line;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Optional;
+import java.util.*;
 
 public class PathFinder extends Application {
     private BorderPane root;
@@ -132,8 +134,6 @@ public class PathFinder extends Application {
         pane.getChildren().add(imageView);
         imageView.setDisable(true);
         enableButtons(true);
-        //pane = new Pane(imageView);
-        //root.setCenter(pane);
     }
 
     private void enableButtons(boolean b){
@@ -141,11 +141,7 @@ public class PathFinder extends Application {
     }
 
 
-
-
-
     private void open() {
-
         //Check om tidigare har sparats.
         if(!saved){
             Alert warning = new Alert(Alert.AlertType.CONFIRMATION);
@@ -180,11 +176,9 @@ public class PathFinder extends Application {
                 label.setLayoutX(x);
                 label.setLayoutY(y + 10);
 
-                //location.setOnMouseClicked(new ClickHandler());
                 location.setId(name);
                 graph.add(location);
                 pane.getChildren().addAll(location,label);
-                //location.relocate(x,y);
 
             }
             while((line = reader.readLine()) != null){
@@ -208,6 +202,41 @@ public class PathFinder extends Application {
                     graph.connect(from, to, medium, distance); }
             }
             reader.close();
+
+
+                /*
+                HÄR GÖRS KOPPLINGARNA MELLAN LOCATIONS
+                */
+            Map<Location,Set<Location>> alreadyDone = new HashMap<>();
+            ObservableList<Node> children = pane.getChildren();
+            ArrayList<Line> linesToAdd = new ArrayList<>();
+
+            for(Node c : children){
+                if(c instanceof Location){
+                    Location l = (Location) c;
+
+                    alreadyDone.put(l, new HashSet<>());
+                    for(Edge<Location> edge: graph.getEdgesFrom(l)){
+
+                        if(alreadyDone.containsKey(edge.getDestination()) && !alreadyDone.get(edge.getDestination()).contains(l)){
+                            /*Line connection = new Line(l.getCenterX(), l.getCenterY(), edge.getDestination().getCenterX(), edge.getDestination().getCenterY());
+                            connection.setDisable(true);
+                            connection.setFill(Color.BLACK);
+                             */
+
+                            Line connection = createConnectionLine(l, edge.getDestination()); // LÄGGER TILL CONNECTION MELLAN LOCATIONS
+                            linesToAdd.add(connection);
+
+                            if(!alreadyDone.get(l).contains(edge.getDestination()))
+                                alreadyDone.get(l).add(edge.getDestination());
+                        }
+                    }
+                }
+            }
+            if(!linesToAdd.isEmpty())
+                pane.getChildren().addAll(linesToAdd);
+
+
         }
         catch(FileNotFoundException e){
             e.printStackTrace();
@@ -215,6 +244,15 @@ public class PathFinder extends Application {
         catch (IOException e){
             e.printStackTrace();
         }
+    }
+
+    private Line createConnectionLine(Location from, Location to){
+        Line connection = new Line(from.getCenterX(), from.getCenterY(), to.getCenterX(), to.getCenterY());
+
+        connection.setDisable(true);
+        connection.setFill(Color.BLACK);
+        connection.setStrokeWidth(2);
+        return connection;
     }
 
     private void save(){
@@ -332,7 +370,8 @@ public class PathFinder extends Application {
                 errorAlert.setHeaderText(null);
                 errorAlert.showAndWait();
             }
-            else if (graph.pathExists(clickedLocations.get(0), clickedLocations.get(1))){
+            //else if (graph.pathExists(clickedLocations.get(0), clickedLocations.get(1))){
+            else if (graph.getEdgeBetween(clickedLocations.get(0), clickedLocations.get(1)) != null){
                 Alert errorAlert = new Alert(Alert.AlertType.ERROR);
                 errorAlert.setTitle("Error!");
                 errorAlert.setContentText("Path already exists!");
@@ -369,6 +408,8 @@ public class PathFinder extends Application {
                         int time = Integer.parseInt(timeTextField.getText().trim());
                         if (!name.isEmpty()) {
                             graph.connect(clickedLocations.get(0), clickedLocations.get(1), name, time);
+                            pane.getChildren().add(createConnectionLine(clickedLocations.get(0), clickedLocations.get(1))); // LÄGGER TILL CONNECTION MELLAN LOCATIONS
+
                         }
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
@@ -394,9 +435,11 @@ public class PathFinder extends Application {
                 clickedLocations.remove(clicked);
             }
 
-            System.out.println(clickedLocations);
+            //System.out.println(clickedLocations);
         }
     }
+
+
 
 
 }
