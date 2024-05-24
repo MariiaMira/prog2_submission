@@ -447,13 +447,13 @@ public class PathFinder extends Application {
                 Label nameLabel = new Label("Name: ");
                 nameLabel.setStyle("-fx-font-size:14");
                 TextField nameTextField = new TextField(graph.getEdgeBetween(location1, location2).getName());
-                nameTextField.setDisable(false);
+                nameTextField.setEditable(false);
                 nameTextField.setPrefWidth(200);
 
                 Label timeLabel = new Label("Time: ");
                 timeLabel.setStyle("-fx-font-size:14");
                 TextField timeTextField = new TextField(String.valueOf(graph.getEdgeBetween(location1,location2).getWeight()));
-                timeTextField.setDisable(false);
+                timeTextField.setEditable(false);
                 timeTextField.setPrefWidth(200);
 
                 windowPane.addRow(0, nameLabel, nameTextField);
