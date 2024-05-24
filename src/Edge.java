@@ -44,7 +44,6 @@ public class Edge <T> implements Serializable {
     }
     @Override
     public String toString() {
-        return "till " + destination + " med " + name + " tar " + weight;
+        return "till " + destination + " med " + name + " tar " + weight + "\n";
     }
-
 }

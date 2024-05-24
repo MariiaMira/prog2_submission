@@ -96,6 +96,7 @@ public class PathFinder extends Application {
 
         Button findPath = new Button("Find Path");
         findPath.setId("btnFindPath");
+        findPath.setOnAction(new FindPathHandler());
         Button showCon = new Button("Show Connection");
         showCon.setId("btnShowConnection");
         showCon.setOnAction(new ShowConnectionHandler());
@@ -577,15 +578,25 @@ public class PathFinder extends Application {
             }
 
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setHeaderText("The Path from " + clickedLocations.get(0).getName()
+                    + " to " + clickedLocations.get(1).getName());
+            TextArea tx = new TextArea();
 
-            TextArea tx = new TextArea(); // testa stroing
             List<Edge<Location>> path = graph.getPath(clickedLocations.get(0), clickedLocations.get(1));
-            tx.setText(path.toString());
+            StringBuilder sb = new StringBuilder();
+            int transferTime = 0;
+            for (Edge<Location> p : path) {
+                sb.append("to " + p.getDestination().getName()
+                        + " by " + p.getName() + " takes " + p.getWeight() + "\n");
+                transferTime += p.getWeight();
+            }
+            sb.append("Total " + transferTime);
+            tx.setText(sb.toString());
 
+            tx.setEditable(false);
+            alert.getDialogPane().setContent(tx);
 
             alert.showAndWait();
-
-
         }
     }
 
